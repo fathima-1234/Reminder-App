@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Reminder</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      /* Center the container vertically */
+      html,
+      body {
+        height: 100%;
+      }
+
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* Optional: Add custom styles for the container */
+      .form-container {
+        width: 400px;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container form-container">
+      <h2 class="mb-4">Create Reminder</h2>
+      <form id="reminderForm">
+        <div class="form-group">
+          <label for="date">Date:</label>
+          <input
+            type="date"
+            class="form-control"
+            id="date"
+            name="date"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="time">Time:</label>
+          <input
+            type="time"
+            class="form-control"
+            id="time"
+            name="time"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="message">Message:</label>
+          <textarea
+            class="form-control"
+            id="message"
+            name="message"
+            rows="4"
+            required
+          ></textarea>
+        </div>
+        <div class="form-group">
+          <label for="reminderType">Reminder Type:</label>
+          <select
+            class="form-control"
+            id="reminderType"
+            name="reminderType"
+            required
+          >
+            <option value="SMS">SMS</option>
+            <option value="Email">Email</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Create Reminder</button>
+      </form>
+    </div>
+
+    <!-- Bootstrap JS (optional, for dropdowns, modals, etc.) -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!--JavaScript code -->
+    <script>
+      document
+        .getElementById("reminderForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault(); // Prevent form submission
+          // Get form data
+          const formData = {
+            date: document.getElementById("date").value,
+            time: document.getElementById("time").value,
+            message: document.getElementById("message").value,
+            reminderType: document.getElementById("reminderType").value,
+          };
+          // Send data to backend
+          fetch('{% url "create-reminder" %}', {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRFToken": "{{ csrf_token }}",
+            },
+            body: JSON.stringify(formData),
+          })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error("Network response was not ok");
+              }
+              return response.json();
+            })
+            .then((data) => {
+              console.log("Success:", data);
+              alert("Reminder created successfully!");
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              alert("Failed to create reminder. Please try again.");
+            });
+        });
+    </script>
+  </body>
+</html>
