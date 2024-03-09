@@ -81,13 +81,13 @@ WSGI_APPLICATION = 'remind_me_later.wsgi.application'
 #     }
 # }
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'remind_me_later',
-        'USER': 'root',
-        'PASSWORD': 'maryamnooh*1',
-        'HOST': 'localhost',   
-        'PORT': '3306',        
+    "default": {
+        "ENGINE": config('DB_ENGINE'),
+        "NAME": config('DB_NAME'),
+        "USER": config('DB_USER'),
+        "PASSWORD": config('DB_PASSWORD'),
+        "HOST": config('DB_HOST'),
+        "PORT": config('DB_PORT', default='', cast=int),
     }
 }
 
